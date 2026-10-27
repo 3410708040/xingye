@@ -541,6 +541,10 @@ function main() {
   write("robots.txt", `User-agent: *\nAllow: /\nSitemap: ${site.url ?? ""}/sitemap.xml\n`);
   write(".nojekyll", "");
 
+  // 自定义域名：GitHub Pages 认 artifact 里的 CNAME 文件
+  const domain = String(process.env.XINGYE_DOMAIN ?? site.domain ?? "").trim();
+  if (domain !== "") write("CNAME", `${domain}\n`);
+
   cpSync(ASSETS, join(DIST, "assets"), { recursive: true });
   if (existsSync(PUBLIC)) cpSync(PUBLIC, DIST, { recursive: true });
 

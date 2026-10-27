@@ -47,6 +47,8 @@ jobs:
         env:
           XINGYE_BASE: ${{ vars.XINGYE_BASE || steps.base.outputs.base }}
           XINGYE_URL: ${{ vars.XINGYE_URL || steps.base.outputs.url }}
+          # 绑定自定义域名后，在这里（或仓库变量 XINGYE_DOMAIN）填域名，构建会写 CNAME
+          XINGYE_DOMAIN: ${{ vars.XINGYE_DOMAIN }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

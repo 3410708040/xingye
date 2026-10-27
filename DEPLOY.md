@@ -52,6 +52,59 @@ wrangler pages deploy dist --project-name xingye
 或在 Cloudflare Dashboard 连 Git 仓库：Build command `node build.mjs`，Output directory `dist`，
 环境变量 `XINGYE_URL=https://xingye.pages.dev`。
 
+## 绑定自定义域名（让地址变成 xingye.xxx）
+
+前提：域名已经买好（Cloudflare / Porkbun / 阿里云 / 腾讯云都行），并且能改 DNS 记录。
+
+### 1) DNS 记录
+
+| 类型 | 名称 | 值 | 说明 |
+|---|---|---|---|
+| A | `@` | `185.199.108.153` | 顶点域名（4 条都要） |
+| A | `@` | `185.199.109.153` | |
+| A | `@` | `185.199.110.153` | |
+| A | `@` | `185.199.111.153` | |
+| AAAA | `@` | `2606:50c0:8000::153` | IPv6（可选，同样 4 条） |
+| AAAA | `@` | `2606:50c0:8001::153` | |
+| AAAA | `@` | `2606:50c0:8002::153` | |
+| AAAA | `@` | `2606:50c0:8003::153` | |
+| CNAME | `www` | `3410708040.github.io` | www 子域指向 Pages |
+
+### 2) 仓库里告诉构建"我换域名了"
+
+仓库 **Settings → Secrets and variables → Actions → Variables** 加三个：
+
+| 变量 | 值（示例） | 作用 |
+|---|---|---|
+| `XINGYE_DOMAIN` | `xingye.blog` | 构建时写 `dist/CNAME` |
+| `XINGYE_URL` | `https://xingye.blog` | canonical / RSS / sitemap 用的正式地址 |
+| `XINGYE_BASE` | 留空（空字符串） | 自定义域名在根路径，不再需要 `/xingye` 前缀 |
+
+> `XINGYE_BASE` 一定要显式设为空：不设的话工作流会按项目站推导出 `/xingye`，导致链接全带前缀。
+> 如果 GitHub 变量的空值不方便填，直接在 `content/site.json` 里写 `"base": ""`、`"domain": "xingye.blog"` 也行。
+
+### 3) 仓库设置里填域名
+
+**Settings → Pages → Custom domain** 填 `xingye.blog` → Save → 等 DNS 检查通过 →
+勾上 **Enforce HTTPS**（证书通常 5–20 分钟签发，最长 24 小时）。
+
+### 4) 重新部署
+
+推一次空提交即可：
+
+```powershell
+git commit --allow-empty -m "chore: 绑定自定义域名" && git push
+```
+
+### 国内域名的两个注意
+
+- 域名在国内注册商买的，需要先做**实名认证**；指向 GitHub Pages（境外服务器）通常不涉及备案，
+  但部分注册商会对"未备案 + 解析到境外"给提示，属正常。
+- 如果以后想让国内访问更稳，可以把同一份 `dist/` 同时部署到 Cloudflare Pages 或国内对象存储 + CDN，
+  域名解析换过去即可，站点代码不用改。
+
+---
+
 ## 方案 D · 自己的服务器（rsync）
 
 ```bash
