@@ -1,0 +1,19 @@
+{
+  "name": "xingye",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "星夜 · 只在夜里开门的观测站：个人博客（人机双声道 + 星图导航 + 夜间时间感）",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node serve.mjs",
+    "dev": "node serve.mjs --watch"
+  },
+  "dependencies": {
+    "highlight.js": "^11.10.0",
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^14.1.0",
+    "markdown-it-container": "^4.0.0"
+  },
+  "license": "MIT"
+}

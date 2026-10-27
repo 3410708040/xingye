@@ -1,0 +1,18 @@
+[build]
+  command = "node build.mjs"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# 静态资源带内容哈希吗？没有，所以只给一周，别设成 immutable
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    cache-control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

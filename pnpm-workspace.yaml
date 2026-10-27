@@ -1,0 +1,6 @@
+packages:
+  - .
+# Windows 上 isolated 布局会给依赖建出坏掉的 junction（markdown-it 就找不到 mdurl），
+# 平铺最稳，构建脚本也就不依赖链接语义了。
+nodeLinker: hoisted
+autoInstallPeers: false

@@ -1,0 +1,13 @@
+# 依赖与本地工具
+node_modules/
+tools/
+
+# 构建产物（CI 里会重新构建）
+dist/
+
+# 部署密钥（只在本机）
+.deploy/
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
